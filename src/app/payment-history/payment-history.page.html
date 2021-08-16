@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Payment History</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-searchbar (keyup)="searchInvoice($event)"></ion-searchbar>
+
+  <ion-list style="width: 100%;">
+    <ion-list-header>
+      <h2>Invoice</h2>
+    </ion-list-header>
+
+    <ion-item-divider style="cursor: pointer;" *ngFor="let invoice of invs;" [hidden]="invoice.display">
+      <ion-label slot="start" (click)="viewDetail(invoice)">
+        <h3><strong>#{{invoice.number}}</strong></h3>
+      </ion-label>
+
+      <ion-icon slot="end" name="create" style="font-size:1em; margin-right: 5px;" (click)="editInvoice(invoice.id)">
+      </ion-icon>
+      <ion-icon slot="end" name="close-circle" style="font-size:1em" (click)="onDelete(invoice.id)"></ion-icon>
+    </ion-item-divider>
+  </ion-list>
+</ion-content>

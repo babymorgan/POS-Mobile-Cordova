@@ -1,0 +1,184 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Payment</ion-title>
+    <ion-button slot="end" color="success" [routerLink]="['/tabs/payment-history']">
+      <ion-icon name="document-text-outline"></ion-icon>
+    </ion-button>
+    <ion-button slot="end" color="medium" (click)="clearCartItems()">
+      <ion-icon name="trash-outline"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row *ngIf="!sellComplete">
+    <ion-searchbar></ion-searchbar>
+
+    <ion-list style="width: 100%;" *ngIf="!quickySubItems">
+      <ion-list-header>
+        <h2>Menu</h2>
+      </ion-list-header>
+
+      <ion-item-divider style="cursor: pointer;" *ngFor="let item of quickyItems;"
+        (click)="getVariantQuickyItems(item)">
+        <ion-avatar slot="start">
+          <p class="feed-avatar">{{item.abbr | uppercase}}</p>
+        </ion-avatar>
+        <ion-label>
+          <h3>{{item.product_name}}</h3>
+        
+        </ion-label>
+      </ion-item-divider>
+
+    </ion-list>
+
+    <ion-list style="width: 100%;" *ngIf="quickySubItems">
+      <ion-toolbar>
+        <ion-button slot="start" color="primary" (click)="backToQuickyItems()">
+          <ion-icon name="arrow-back-outline"></ion-icon><p>Back to Menu</p>
+        </ion-button>
+      </ion-toolbar>
+ 
+
+      <ion-item-divider style="cursor: pointer;" *ngFor="let item of quickySubItems" (click)="onItemSelected(item)">
+     
+        <ion-avatar slot="start">
+          <p class="feed-avatar">{{item.abbr | uppercase}}</p>
+        </ion-avatar>
+        <ion-label>
+          <h3>{{item.name}}</h3>
+        
+        </ion-label>
+      </ion-item-divider>
+
+    </ion-list>
+
+  </ion-row>
+
+  <ion-row *ngIf="sellComplete">
+    <ion-toolbar>
+      <ion-button slot="start" color="success" (click)="backToMenu()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-toolbar>
+
+    <ion-list style="width: 100%;">
+      <ion-list-header>
+        <h2>
+          <ion-icon name="cart-outline"></ion-icon> Order Summary
+        </h2>
+      </ion-list-header>
+
+      <ion-item-divider style="cursor: pointer;" *ngFor="let item of cart.items;let i = index">
+        <ion-label slot="start">
+          <p>{{item.quantity}}x</p>
+        </ion-label>
+
+        <ion-label>
+          <p><strong>{{item.name}}</strong></p>
+        </ion-label>
+
+        <ion-label color="success" slot="end">
+          <p><strong>{{item.total_price}}</strong></p>
+        </ion-label>
+
+        <ion-icon slot="end" name="create" style="font-size:1em" (click)="onItemSelected(item.id)"></ion-icon>
+        <ion-icon slot="end" name="close-circle-outline" style="font-size:1em" (click)="deleteMenu(i)"></ion-icon>
+      </ion-item-divider>
+    </ion-list>
+
+
+    <ion-list style="width: 100%;">
+      <ion-item-divider>
+        <ion-label slot="start">
+          <p>Sub Total</p>
+        </ion-label>
+
+        <ion-label slot="end">
+          <p><strong>{{cart.sub_total}}</strong></p>
+        </ion-label>
+      </ion-item-divider>
+
+      <ion-item-divider>
+        <ion-label slot="start">
+          <p>Discount %</p>
+        </ion-label>
+        <ion-input slot="start" type="text" [(ngModel)]="cart.discount" placeholder="Discount %"
+          (keyup)="getDiscount($event)" precentagenum>
+        </ion-input>
+
+        <ion-label slot="end">
+          <p>{{cart.discount_amount}}</p>
+        </ion-label>
+      </ion-item-divider>
+
+
+      <ion-item-divider>
+        <ion-label slot="start">
+          <p>Tax %</p>
+        </ion-label>
+        <ion-input slot="start" type="text" [(ngModel)]="cart.tax" placeholder="Tax %" (keyup)="getTax($event)"
+          precentagenum>
+        </ion-input>
+
+        <ion-label slot="end">
+          <p>{{cart.tax_amount}}</p>
+        </ion-label>
+      </ion-item-divider>
+
+      <ion-item-divider>
+        <ion-input type="text" [(ngModel)]="cart.notes" placeholder="Notes">
+        </ion-input>
+      </ion-item-divider>
+
+      <ion-item-divider>
+        <ion-label slot="start">
+          <p>Payment Method</p>
+        </ion-label>
+        <ion-select #paymentSelect ok-text="Confirm" cancel-text="Cancel" [value]="cart.payment_id" slot="end"
+          (ionChange)="selectPayment(paymentSelect.value)">
+          <ion-select-option [value]="payment.id" *ngFor="let payment of paymentMethod; let i = index;">
+            <p>{{payment.name}}</p>
+          </ion-select-option>
+        </ion-select>
+      </ion-item-divider>
+
+      <ion-item-divider>
+        <ion-label slot="start">
+          <p>Supplier</p>
+        </ion-label>
+        <ion-select #customerSelect ok-text="Confirm" cancel-text="Cancel" [value]="cart.contact_id" slot="end"
+          (ionChange)="selectCustomer(customerSelect.value)">
+          <ion-select-option [value]="customer.key" *ngFor="let customer of customerList; let i = index;">
+            <p>{{customer.value}}</p>
+          </ion-select-option>
+        </ion-select>
+      </ion-item-divider>
+    </ion-list>
+
+    <ion-toolbar *ngIf="cart.total_quantity > 0">
+      <ion-button slot="start" style="width: 100%;" expand="block" color="medium" (click)="onSubmit()">
+        Pay Later
+      </ion-button>
+
+      <ion-button slot="end" style="width: 100%;" expand="block" color="success" (click)="onPaymentConfirmation()">
+        Pay Now {{cart.total}}
+      </ion-button>
+    </ion-toolbar>
+
+    <ion-toolbar *ngIf="cart.total_quantity == 0">
+      <ion-button style="width: 100%;" expand="block" color="success" (click)="clearCartItems()">
+        Back To Menu
+      </ion-button>
+    </ion-toolbar>
+  </ion-row>
+
+</ion-content>
+
+<ion-footer *ngIf="cart.total_quantity > 0 && !sellComplete">
+  <ion-toolbar>
+    <ion-button padding expand="block" color="success" (click)="viewCart()">
+      <ion-icon name="cart" style="margin-right:5px;"></ion-icon>{{cart.total_quantity}} View Cart {{cart.total}}
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

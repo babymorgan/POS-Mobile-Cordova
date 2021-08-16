@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Feed</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form padding>
+    <ion-row>
+      <ion-col col-12>
+        <div input-field>
+          <ion-item>
+            <ion-input type="text" placeholder="Subject" [(ngModel)]="feed.subject"
+              [ngModelOptions]="{standalone: true}">
+            </ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-textarea type="text" placeholder="Message" [(ngModel)]="feed.message"
+              [ngModelOptions]="{standalone: true}">
+            </ion-textarea>
+          </ion-item>
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <div class="ion-padding">
+      <ion-button color="success" type="submit" class="ion-no-margin" (click)="saveFeed()">Post to Feed</ion-button>
+    </div>
+  </form>
+
+  <ion-list>
+    <ion-list-header>
+      Recent Feeds
+    </ion-list-header>
+
+    <ion-item-divider style="cursor: pointer;" *ngFor="let feed of feedList;" (click)="createModal(feed)">
+      <ion-avatar slot="start">
+        <p class="feed-avatar">{{feed.abbr | uppercase}}</p>
+      </ion-avatar>
+      <ion-label>
+        <h3>{{feed.company_name}}</h3>
+        <h2>{{feed.subject}}</h2>
+      </ion-label>
+    </ion-item-divider>
+
+  </ion-list>
+</ion-content>

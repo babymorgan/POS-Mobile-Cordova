@@ -1,0 +1,55 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Add To Cart</ion-title>
+        <ion-buttons slot="primary">
+            <ion-button (click)="dismiss()">
+                <ion-icon slot="icon-only" name="close"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+    <ion-list>
+        <ion-item-divider>
+            <ion-label>
+                <h2><strong>{{variantName}}</strong></h2>
+            </ion-label>
+            <ion-note slot="end" color="success">
+                <h2>{{variantPrice}}</h2>
+            </ion-note>
+        </ion-item-divider>
+
+        <ion-item-divider>
+            <ion-textarea type="text" placeholder="Add notes" [(ngModel)]="notes" [ngModelOptions]="{standalone: true}">
+            </ion-textarea>
+        </ion-item-divider>
+
+        <ion-item lines="none" padding>
+            <ion-row style="width: 100%;justify-content: center;">
+                <ion-buttons (click)="addMoreItem()">
+                    <ion-button>
+                        <ion-icon name="add-circle-outline"></ion-icon>
+                    </ion-button>
+                </ion-buttons>
+                <ion-text color="success" text-center>
+                    <p>{{quantity}}</p>
+                </ion-text>
+                <ion-buttons (click)="removeItem()">
+                    <ion-button>
+                        <ion-icon name="remove-circle-outline"></ion-icon>
+                    </ion-button>
+                </ion-buttons>
+            </ion-row>
+        </ion-item>
+    </ion-list>
+
+    <ion-button padding expand="block" color="success" *ngIf="quantity > 0" (click)="addToCart()">
+        <ion-icon name="cart" style="margin-right:5px;"></ion-icon> Add To Cart {{totalItemPrice}}
+    </ion-button>
+
+    <ion-button padding expand="block" *ngIf="quantity == 0" color="success" (click)="dismiss()">
+        Back To Menu
+    </ion-button>
+
+</ion-content>

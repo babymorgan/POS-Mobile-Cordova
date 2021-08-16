@@ -1,0 +1,29 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>{{subject}}</ion-title>
+        <ion-buttons slot="primary">
+            <ion-button (click)="dismiss()">
+                <ion-icon slot="icon-only" name="close"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+    <ion-list>
+        <ion-item-divider>
+            <ion-label>{{companyName}}</ion-label>
+        </ion-item-divider>
+        <ion-item-divider>
+            <ion-label>{{businessType}}</ion-label>
+        </ion-item-divider>
+        <ion-item-divider>
+            <ion-label>{{phoneNumber}}</ion-label>
+        </ion-item-divider>
+        <ion-item-divider>
+            <ion-label>{{address}}</ion-label>
+        </ion-item-divider>
+        <ion-item-divider>
+            <ion-label>{{message}}</ion-label>
+        </ion-item-divider>
+    </ion-list>
+</ion-content>

@@ -1,0 +1,94 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>#{{invoice.number}}</ion-title>
+        <ion-buttons slot="primary">
+            <ion-button (click)="dismiss()">
+                <ion-icon slot="icon-only" name="close"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+    <ion-list>
+        <ion-item-divider>
+            <ion-label slot="start">
+                <h3>Date</h3>
+            </ion-label>
+
+            <ion-label slot="end">
+                <h3>{{invoice.date | date : 'medium' }}</h3>
+            </ion-label>
+        </ion-item-divider>
+
+        <ion-item-divider>
+            <ion-label slot="start">
+                <h3>Quantity</h3>
+            </ion-label>
+
+            <ion-label slot="end">
+                <h3>{{invoice.total_quantity }}</h3>
+            </ion-label>
+        </ion-item-divider>
+
+        <ion-item-divider>
+            <ion-label slot="start">
+                <h3>Sub Total</h3>
+            </ion-label>
+
+            <ion-label slot="end">
+                <h3>{{ invoice.sub_total }}</h3>
+            </ion-label>
+        </ion-item-divider>
+
+        <ion-item-divider>
+            <ion-label slot="start">
+                <h3>Discount %</h3>
+            </ion-label>
+
+            <ion-label slot="end">
+                <h3>{{ invoice.discount }}</h3>
+            </ion-label>
+        </ion-item-divider>
+
+        <ion-item-divider>
+            <ion-label slot="start">
+                <h3>Discount amount</h3>
+            </ion-label>
+
+            <ion-label slot="end">
+                <h3>{{ invoice.discount_amount }}</h3>
+            </ion-label>
+        </ion-item-divider>
+
+        <ion-item-divider>
+            <ion-label slot="start">
+                <h3>Tax %</h3>
+            </ion-label>
+
+            <ion-label slot="end">
+                <h3>{{ invoice.tax }}</h3>
+            </ion-label>
+        </ion-item-divider>
+
+        <ion-item-divider>
+            <ion-label slot="start">
+                <h3>Tax Amount</h3>
+            </ion-label>
+
+            <ion-label slot="end">
+                <h3>{{ invoice.tax_amount }}</h3>
+            </ion-label>
+        </ion-item-divider>
+
+        <ion-item-divider>
+            <ion-label slot="start">
+                <h3>Total</h3>
+            </ion-label>
+
+            <ion-label slot="end">
+                <h3>{{ invoice.total }}</h3>
+            </ion-label>
+        </ion-item-divider>
+    </ion-list>
+</ion-content>

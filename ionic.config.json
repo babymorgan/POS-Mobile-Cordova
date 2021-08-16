@@ -1,0 +1,7 @@
+{
+  "name": "Mobile-POS",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

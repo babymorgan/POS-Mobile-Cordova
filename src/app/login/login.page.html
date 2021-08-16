@@ -1,0 +1,53 @@
+<!-- Themes  register-flat-->
+<ion-content>
+  <ion-grid no-padding>
+    <!-- logo -->
+    <ion-row header align-items-start align-items-stretch>
+      <ion-col col-10 offset-1 col-md-6 offset-md-3>
+        <img logo src="" />
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <!-- Section form>-->
+      <ion-col col-12 offset-1 col-md-6 offset-md-3>
+        <form padding>
+          <ion-row align-items-start>
+            <ion-col col-12>
+              <ion-text color="success">
+                <h1><strong>POS101</strong></h1>
+              </ion-text>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col col-12>
+              <div input-field>
+                <ion-item no-padding>
+                  <ion-input type="text" placeholder="Username" [(ngModel)]="loginModel.username"
+                    [ngModelOptions]="{standalone: true}"></ion-input>
+                </ion-item>
+                <ion-item no-padding>
+                  <ion-input type="password" placeholder="Password" [(ngModel)]="loginModel.password"
+                    [ngModelOptions]="{standalone: true}"></ion-input>
+                </ion-item>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col col-12 no-padding text-center>
+              <ion-button color="success" color="success" no-margin ion-button full text-uppercase (click)="login()">
+                Login</ion-button>
+            </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col col-12 no-padding no-margin text-center>
+              <a style="cursor: pointer;">
+                <ion-text color="secondary" no-margin no-padding>Forgot Password </ion-text>
+              </a>
+            </ion-col>
+          </ion-row>
+        </form>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
