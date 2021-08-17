@@ -8,10 +8,9 @@ import { PrintContentBody, PrintContentService } from "../service/printcontent.s
 export class PrintBluetoothService {
 
   constructor(
-    private bluetoothSerial: BluetoothSerial,
     public printcontent: PrintContentService,
     public body: PrintContentBody,
-  
+    public bluetoothSerial: BluetoothSerial,
   ) {
   }
   getBluetoothList(){
