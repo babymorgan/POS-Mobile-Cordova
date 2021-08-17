@@ -17,7 +17,9 @@ export class FeedPage implements OnInit {
   constructor(private feedService: FeedService,
     private alertController: AlertController,
     private modalController: ModalController,
-    private storage: Storage, private authService: AuthService) { }
+    private storage: Storage, private authService: AuthService) { 
+    this.getFeedList();
+    }
 
   feedList;
   subject;
@@ -26,7 +28,6 @@ export class FeedPage implements OnInit {
 
   ngOnInit() {
     this.feed = new FeedModel();
-    this.getFeedList();
   }
 
   getFeedList() {
