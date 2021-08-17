@@ -38,7 +38,7 @@ export class PrinterSettingPage implements OnInit {
 
   save() {
     this.storage.set("printer", this.macAddress)
-    this.router.navigate(['/home/sells']);
+    this.router.navigate(['/home/sales']);
   }
 
 }
