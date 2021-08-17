@@ -11,13 +11,18 @@ import { Router } from '@angular/router';
   templateUrl: './printer-setting.page.html',
   styleUrls: ['./printer-setting.page.scss'],
 })
-export class PrinterSettingPage {
+export class PrinterSettingPage implements OnInit {
 
   bluetoothList: any = [];
   selectedPrinter: any;
   macAddress: any;
 
   constructor(private router: Router, public platform: Platform, private printer: PrintBluetoothService, private contentService: PrintContentService, private storage: Storage) { }
+
+  ngOnInit() {
+    this.listPrinter()
+  }
+
 
   listPrinter() {
     this.printer.getBluetoothList()
