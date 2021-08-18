@@ -327,18 +327,18 @@ export class SellsPage implements OnInit {
     this.cart.user_id = this.user_id;
     this.cart.payment_id = this.paymentMethod[0].id;
 
-    //this.cashierService.SubmitCart(this.cart).subscribe(res => {
-    //  this.sellCompleteInfo = res.data;
-    //  let message = "Invoice #" + this.sellCompleteInfo.number + " is created successfully.";
-    //  let status = "Paid Invoice";
-    //  this.createSuccessMessage(message, status);
-    //}, async (err) => {
-    //  const alert = await this.alertController.create({
-    //    header: "Failed",
-    //    message: "Failed in creating invoice",
-    //    buttons: ['OK']
-    //  });
-    //})
+    this.cashierService.SubmitCart(this.cart).subscribe(res => {
+      this.sellCompleteInfo = res.data;
+      let message = "Invoice #" + this.sellCompleteInfo.number + " is created successfully.";
+      let status = "Paid Invoice";
+      this.createSuccessMessage(message, status);
+    }, async (err) => {
+      const alert = await this.alertController.create({
+        header: "Failed",
+        message: "Failed in creating invoice",
+        buttons: ['OK']
+      });
+    })
 
     this.GenerateContent()
     
@@ -410,9 +410,6 @@ export class SellsPage implements OnInit {
     //content += this.item();
     return content;
     this.printer.printBT(this.selectedPrinter,content)
-    
-   
-   
   }
 
 
