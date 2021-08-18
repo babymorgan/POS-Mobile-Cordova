@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { BluetoothSerial } from "@ionic-native/bluetooth-serial/ngx";
 import { PrintContentBody, PrintContentService } from "../service/printcontent.service";
+import { Storage } from "@ionic/storage";
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,8 @@ export class PrintBluetoothService {
     public printcontent: PrintContentService,
     public body: PrintContentBody,
     public bluetoothSerial: BluetoothSerial,
+    private storage: Storage
+
   ) {
   }
   getBluetoothList(){
@@ -27,6 +30,9 @@ export class PrintBluetoothService {
   }
 
   printBT(macAddress, data_string) {
+  this.storage.get("printer").then((val)=>{
+    val = macAddress
+  })   
 
     this.connectBt(macAddress).subscribe(_ => {
       this.bluetoothSerial.write(data_string).then

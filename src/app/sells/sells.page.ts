@@ -7,7 +7,9 @@ import { cartItemModel, cartModel,invoiceStatus } from '../models/cart.model';
 import { ActivatedRoute } from '@angular/router';
 import { Storage } from '@ionic/storage';
 import { CustomerService } from '../service/customer.service';
-//import { PrintBluetoothService } from '../service/printer.service';
+import { PrintLineService } from '../service/printline.service';
+import { PrintBluetoothService } from '../service/printer.service';
+
 
 
 @Component({
@@ -37,7 +39,8 @@ export class SellsPage implements OnInit {
   user;
   user_id;
   content;
-
+  selectedPrinter: any;
+  maxlength: number;
 
   compareWith(o1, o2) {
     return o1 && o2 ? o1.id === o2.id : o1 === o2;
@@ -47,8 +50,8 @@ export class SellsPage implements OnInit {
 
 
 
-  constructor(private customerService: CustomerService ,private cashierService: SalesService, private paymentService:PaymentService, private route: ActivatedRoute, private modalController: ModalController, private alertController: AlertController, private storage: Storage, 
-   ) {
+  constructor(private customerService: CustomerService , private printline: PrintLineService,private cashierService: SalesService, private paymentService:PaymentService, private route: ActivatedRoute, private modalController: ModalController, private alertController: AlertController, private storage: Storage, 
+   private printer:PrintBluetoothService) {
 
     this.storage.get('user').then((result) => {
       this.user = JSON.parse(result)
@@ -241,7 +244,7 @@ export class SellsPage implements OnInit {
     setTimeout(() => {
       this.cart.discount = +event.target.value;
       if (this.cart.discount) {
-        this.cart.discount_amount = this.cart.discount / 100 * this.cart.sub_total;
+        this.cart.discount_amount  = this.cart.discount / 100 * this.cart.sub_total;
       }
 
       let total = this.cart.sub_total - this.cart.discount_amount;
@@ -272,13 +275,17 @@ export class SellsPage implements OnInit {
     this.cart.date = new Date();
     this.cart.status = invoiceStatus.Order;
     this.cart.user_id = this.user_id;
-    console.log(this.cart)
+
     this.cashierService.SubmitCartOrder(this.cart).subscribe(res => {
       this.sellCompleteInfo = res.data;
       let message = "Invoice #" + this.sellCompleteInfo.number + " is created successfully.";
       let status = "Unpaid Invoice";
       this.createSuccessMessage(message, status);
     })
+
+   
+
+
   }
 
   async createSuccessMessage(message, status) {
@@ -304,8 +311,11 @@ export class SellsPage implements OnInit {
   selectCustomer(value) {
 
     this.cart.contact_id = value
-    console.log(this.cart.contact_id)
+ 
   }
+
+
+
 
   onPaymentConfirmation() {
     this.cart.payment_status = 2;
@@ -316,22 +326,96 @@ export class SellsPage implements OnInit {
     this.cart.tax = parseInt(this.cart.tax.toString());
     this.cart.user_id = this.user_id;
     this.cart.payment_id = this.paymentMethod[0].id;
+
+    //this.cashierService.SubmitCart(this.cart).subscribe(res => {
+    //  this.sellCompleteInfo = res.data;
+    //  let message = "Invoice #" + this.sellCompleteInfo.number + " is created successfully.";
+    //  let status = "Paid Invoice";
+    //  this.createSuccessMessage(message, status);
+    //}, async (err) => {
+    //  const alert = await this.alertController.create({
+    //    header: "Failed",
+    //    message: "Failed in creating invoice",
+    //    buttons: ['OK']
+    //  });
+    //})
+
+    this.GenerateContent()
     
-    //console.log(this.cart)
-    //this.printReceipt()
-    this.cashierService.SubmitCart(this.cart).subscribe(res => {
-      this.sellCompleteInfo = res.data;
-      let message = "Invoice #" + this.sellCompleteInfo.number + " is created successfully.";
-      let status = "Paid Invoice";
-      this.createSuccessMessage(message, status);
-    }, async (err) => {
-      const alert = await this.alertController.create({
-        header: "Failed",
-        message: "Failed in creating invoice",
-        buttons: ['OK']
-      });
-    })
   }
+
+  LongString(text: string): string {
+    let split: string[] = [];
+    let output: string = "";
+    split = text.split("\n");
+    split.forEach(s => {
+        output += this.printline.AppendLongStringCenter(s);
+    });
+
+    return output;
+  }
+
+
+  Header(): string {
+    this.printline.Init(this.maxlength);
+    let header: string = "";
+    header += this.printline.AppendCenter("*****");
+      header += this.LongString(this.cart.number.replace(/<br\s*[\/]?>/gi, "\n"));
+    return header;
+  }
+
+  ContacInfo(): string {
+    let info: string = "";
+    if (this.cart.contact_id) {
+      info += this.LongString(this.cart.contact_id);
+    }
+    return info;
+  }
+
+  //item() {
+  //  let itemsText: string = "";
+  //  this.cart.items.forEach((item)=>{
+  //    let qty 
+  //    qty = item.quantity.toString
+//
+  //    let discount
+  //    discount = item.discount_amount.toString
+//
+  //    let total
+  //    total = item.total_price.toString
+//
+  //    itemsText += this.printline.AppendLeft(item.name) + "\n";
+  //    itemsText += this.printline.AppendLine(qty + discount, total);
+  //
+  //      itemsText += this.LineSeparator();
+  //     
+  // 
+  //    return itemsText;
+  //  })
+  //}
+
+
+  LineSeparator(): string {
+    return this.printline.Separator();
+  }
+  
+  GenerateContent(): string {
+    this.storage.get("printer").then((val)=>{
+      val = this.selectedPrinter
+    })
+    let content: string = "";
+
+    content += this.Header(); // Generate  Template Name & Address
+    content += this.ContacInfo(); //Generate  Contact Info
+    //content += this.item();
+    return content;
+    this.printer.printBT(this.selectedPrinter,content)
+    
+   
+   
+  }
+
+
 
 //  printReceipt(){
 //    let item = this.cart.items
@@ -350,11 +434,11 @@ export class SellsPage implements OnInit {
 //  
 //  this.content =  + tanggal + noInvoice + customer + separator + header + separator + item + separator + total;
 //
-//  console.log(this.content)
+//  
 //});
 
    // let invoicePage = this.content
-   // console.log(invoicePage)
+   //
    //  this.printer.printBT(this.selectedPrinter,invoicePage,)
     //}
 }
