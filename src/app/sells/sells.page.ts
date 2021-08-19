@@ -38,7 +38,7 @@ export class SellsPage implements OnInit {
   dropdownList = [];
   user;
   user_id;
-  content;
+  content: string = "";
   selectedPrinter: any;
   maxlength: number;
 
