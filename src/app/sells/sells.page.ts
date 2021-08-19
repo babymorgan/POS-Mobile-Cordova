@@ -341,6 +341,12 @@ export class SellsPage implements OnInit {
     })
 
     this.GenerateContent()
+    this.storage.get("printer").then((val)=>{
+      val = this.selectedPrinter
+      this.printer.printBT(this.selectedPrinter, this.content)
+      console.log(this.content)
+    })   
+    
     
   }
 
@@ -357,10 +363,13 @@ export class SellsPage implements OnInit {
 
 
   Header(): string {
+    let invoiceNumber = this.cart.number
     this.printline.Init(this.maxlength);
     let header: string = "";
     header += this.printline.AppendCenter("*****");
-      header += this.LongString(this.cart.number.replace(/<br\s*[\/]?>/gi, "\n"));
+      header += this.printline.AppendCenter(invoiceNumber + "\n");
+
+      
     return header;
   }
 
@@ -407,9 +416,9 @@ export class SellsPage implements OnInit {
 
     content += this.Header(); // Generate  Template Name & Address
     content += this.ContacInfo(); //Generate  Contact Info
-    //content += this.item();
+    this.content = content
     return content;
-    this.printer.printBT(this.selectedPrinter,content)
+  
   }
 
 
