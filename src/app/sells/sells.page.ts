@@ -9,6 +9,7 @@ import { Storage } from '@ionic/storage';
 import { CustomerService } from '../service/customer.service';
 import { PrintLineService } from '../service/printline.service';
 import { PrintBluetoothService } from '../service/printer.service';
+import { PrinterSetting } from '../models/localDataModels';
 
 
 
@@ -22,6 +23,7 @@ export class SellsPage implements OnInit {
   params;
 
   //Quickey
+  setting: PrinterSetting
   quickyItems: any[] = [];
   quickySubItems;
   subItemName;
@@ -41,6 +43,7 @@ export class SellsPage implements OnInit {
   content: string = "";
   selectedPrinter: any;
   maxlength: number;
+  BTprinter;
 
   compareWith(o1, o2) {
     return o1 && o2 ? o1.id === o2.id : o1 === o2;
@@ -60,6 +63,7 @@ export class SellsPage implements OnInit {
 
     this.storage.get('printer').then((result) =>{
       this.selectedPrinter = JSON.parse(result)
+      this.BTprinter = this.selectedPrinter
     })
 
      
@@ -347,10 +351,10 @@ export class SellsPage implements OnInit {
 
   onPrint(){
     this.GenerateContent()
-    let macAddress = this.selectedPrinter
+    let macAddress = this.BTprinter 
     let content = this.content
     this.printer.printBT(macAddress, content)
-    
+    console.log(macAddress)
   }
 
   LongString(text: string): string {
