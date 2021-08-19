@@ -347,7 +347,10 @@ export class SellsPage implements OnInit {
 
   onPrint(){
     this.GenerateContent()
-    this.printer.printBT(this.selectedPrinter, this.content)
+    let macAddress = this.selectedPrinter
+    let content = this.content
+    this.printer.printBT(macAddress, content)
+    
   }
 
   LongString(text: string): string {
