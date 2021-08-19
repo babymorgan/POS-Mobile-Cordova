@@ -16,6 +16,7 @@ export class PrinterSettingPage implements OnInit {
   bluetoothList: any = [];
   selectedPrinter: any;
   macAddress: any;
+  printuse:any;
 
   constructor(private router: Router, public platform: Platform, private printer: PrintBluetoothService, private contentService: PrintContentService, private storage: Storage) { }
 
@@ -33,14 +34,15 @@ export class PrinterSettingPage implements OnInit {
 
   selectPrinter(macAddress) {
     this.selectedPrinter = macAddress;
+    
    
   }
 
   save() {
     let macAddress = this.selectedPrinter
+    this.printuse = macAddress
+    this.storage.set("printer", JSON.stringify(this.printuse))
     let testPrint = "Printer has been saved \n\n\n This is a test print \n\n\n"
-
-    this.storage.set("printer", macAddress)
     this.router.navigate(['/home/sales']);
     this.printer.printBT(macAddress, testPrint)
   }

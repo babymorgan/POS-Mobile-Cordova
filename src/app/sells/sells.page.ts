@@ -58,6 +58,10 @@ export class SellsPage implements OnInit {
       this.user_id = this.user.id
     });
 
+    this.storage.get('printer').then((result) =>{
+      this.selectedPrinter = JSON.parse(result)
+    })
+
      
 
     let queryString = this.route.snapshot.params;
@@ -343,13 +347,7 @@ export class SellsPage implements OnInit {
 
   onPrint(){
     this.GenerateContent()
-    this.storage.get("printer").then((val)=>{
-      val = this.selectedPrinter
-      let content = this.content
-      this.printer.printBT(this.selectedPrinter, content)
-      console.log(this.content)
-      console.log(this.selectedPrinter)
-    })  
+    this.printer.printBT(this.selectedPrinter, this.content)
   }
 
   LongString(text: string): string {
