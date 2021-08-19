@@ -339,15 +339,16 @@ export class SellsPage implements OnInit {
         buttons: ['OK']
       });
     })
+  }
 
+  onPrint(){
     this.GenerateContent()
     this.storage.get("printer").then((val)=>{
       val = this.selectedPrinter
       this.printer.printBT(this.selectedPrinter, this.content)
       console.log(this.content)
-    })   
-    
-    
+      console.log(this.selectedPrinter)
+    })  
   }
 
   LongString(text: string): string {
