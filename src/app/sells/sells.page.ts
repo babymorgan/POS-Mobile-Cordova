@@ -345,7 +345,8 @@ export class SellsPage implements OnInit {
     this.GenerateContent()
     this.storage.get("printer").then((val)=>{
       val = this.selectedPrinter
-      this.printer.printBT(this.selectedPrinter, this.content)
+      let content = this.content
+      this.printer.printBT(this.selectedPrinter, content)
       console.log(this.content)
       console.log(this.selectedPrinter)
     })  

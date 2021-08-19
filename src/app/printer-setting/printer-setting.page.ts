@@ -40,7 +40,7 @@ export class PrinterSettingPage implements OnInit {
     let macAddress = this.selectedPrinter
     let testPrint = "Printer has been saved \n\n\n This is a test print \n\n\n"
 
-    this.storage.set("printer", JSON.stringify(macAddress))
+    this.storage.set("printer", macAddress)
     this.router.navigate(['/home/sales']);
     this.printer.printBT(macAddress, testPrint)
   }
