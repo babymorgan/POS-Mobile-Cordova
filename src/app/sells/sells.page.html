@@ -165,7 +165,7 @@
         Received Later
       </ion-button>
 
-      <ion-button slot="end" style="width: 100%;" expand="block" color="success" (click)="onPrint()">
+      <ion-button slot="end" style="width: 100%;" expand="block" color="success" (click)="onPrint(); onPaymentConfirmation()">
         Received Now {{cart.total}}
       </ion-button>
     </ion-toolbar>

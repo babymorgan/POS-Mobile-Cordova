@@ -322,9 +322,6 @@ export class SellsPage implements OnInit {
  
   }
 
-
-
-
   onPaymentConfirmation() {
     this.cart.payment_status = 2;
     this.cart.status = invoiceStatus.Receipt;
@@ -355,6 +352,7 @@ export class SellsPage implements OnInit {
     let content = this.content
     this.printer.printBT(macAddress, content)
     console.log(macAddress)
+    console.log(content)
   }
 
   LongString(text: string): string {
@@ -388,28 +386,6 @@ export class SellsPage implements OnInit {
     return info;
   }
 
-  //item() {
-  //  let itemsText: string = "";
-  //  this.cart.items.forEach((item)=>{
-  //    let qty 
-  //    qty = item.quantity.toString
-//
-  //    let discount
-  //    discount = item.discount_amount.toString
-//
-  //    let total
-  //    total = item.total_price.toString
-//
-  //    itemsText += this.printline.AppendLeft(item.name) + "\n";
-  //    itemsText += this.printline.AppendLine(qty + discount, total);
-  //
-  //      itemsText += this.LineSeparator();
-  //     
-  // 
-  //    return itemsText;
-  //  })
-  //}
-
 
   LineSeparator(): string {
     return this.printline.Separator();
@@ -423,9 +399,24 @@ export class SellsPage implements OnInit {
 
     content += this.Header(); // Generate  Template Name & Address
     content += this.ContacInfo(); //Generate  Contact Info
+    content +=  "\n"
+    content += this.item() + "\n"
     this.content = content
     return content;
   
+  }
+
+  item(): string{
+    let item = this.cart.items
+    let itm: string = ""
+    item.forEach(i =>{
+      let iName = i.name;
+      let iPrice = i.price
+
+      itm += iName + "\n"
+      itm += iPrice + "\n"
+    })
+   return itm
   }
 
 
