@@ -65,6 +65,7 @@ export class SellsPage implements OnInit {
     this.storage.get('printer').then((result) =>{
       this.selectedPrinter = JSON.parse(result)
       this.BTprinter = this.selectedPrinter
+      console.log(this.BTprinter)
     })
 
      

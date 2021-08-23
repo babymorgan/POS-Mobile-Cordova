@@ -30,8 +30,6 @@ export class PrintBluetoothService {
   }
 
   printBT(macAddress, data_string) {
- 
-
     this.connectBt(macAddress).subscribe(_ => {
       this.bluetoothSerial.write(data_string).then
         (_ => {
