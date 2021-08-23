@@ -176,6 +176,11 @@
       </ion-button>
     </ion-toolbar>
   </ion-row>
+  
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
 
 </ion-content>
 
@@ -186,7 +191,5 @@
     </ion-button>
   </ion-toolbar>
 
-  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
+
 </ion-footer>
