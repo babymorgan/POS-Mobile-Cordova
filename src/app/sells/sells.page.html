@@ -185,4 +185,8 @@
       <ion-icon name="cart" style="margin-right:5px;"></ion-icon>{{cart.total_quantity}} View Cart {{cart.total}}
     </ion-button>
   </ion-toolbar>
+
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
 </ion-footer>
