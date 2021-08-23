@@ -10,6 +10,7 @@ import { CustomerService } from '../service/customer.service';
 import { PrintLineService } from '../service/printline.service';
 import { PrintBluetoothService } from '../service/printer.service';
 import { PrinterSetting } from '../models/localDataModels';
+import { DatePipe } from '@angular/common';
 
 
 
@@ -331,7 +332,7 @@ export class SellsPage implements OnInit {
     this.cart.tax = parseInt(this.cart.tax.toString());
     this.cart.user_id = this.user_id;
     this.cart.payment_id = this.paymentMethod[0].id;
-
+ 
     this.cashierService.SubmitCart(this.cart).subscribe(res => {
       this.sellCompleteInfo = res.data;
       let message = "Invoice #" + this.sellCompleteInfo.number + " is created successfully.";
@@ -368,11 +369,14 @@ export class SellsPage implements OnInit {
 
 
   Header(): string {
+    const datepipe: DatePipe = new DatePipe('en-US')
     let invoiceNumber = this.cart.number
+    let invoiceDate = datepipe.transform(this.cart.date,'dd-MMM-YYYY HH:mm')
     this.printline.Init(this.maxlength);
     let header: string = "";
-    header += this.printline.AppendCenter("*****");
-      header += this.printline.AppendCenter(invoiceNumber + "\n");
+    header += this.printline.AppendCenter("              *****              \n");
+      header += this.printline.AppendCenter("Invoice       : " + invoiceNumber + "\n");
+      header += this.printline.AppendCenter("Date          : " + invoiceDate + "\n");
 
       
     return header;
@@ -380,9 +384,8 @@ export class SellsPage implements OnInit {
 
   ContacInfo(): string {
     let info: string = "";
-    if (this.cart.contact_id) {
-      info += this.LongString(this.cart.contact_id);
-    }
+    let customerName = this.cart.contact_id 
+    info += this.printline.AppendCenter("Customer      : " + customerName + "\n");
     return info;
   }
 
@@ -395,12 +398,17 @@ export class SellsPage implements OnInit {
     this.storage.get("printer").then((val)=>{
       val = this.selectedPrinter
     })
+    let total = this.cart.total
     let content: string = "";
-
     content += this.Header(); // Generate  Template Name & Address
     content += this.ContacInfo(); //Generate  Contact Info
     content +=  "\n"
+    content +=  "\n"
+    content += "Item                    Price\n"
+    content += "--------------------------------\n"
     content += this.item() + "\n"
+    content += "--------------------------------\n"
+    content += "                 total:"+ total 
     this.content = content
     return content;
   
@@ -411,10 +419,11 @@ export class SellsPage implements OnInit {
     let itm: string = ""
     item.forEach(i =>{
       let iName = i.name;
-      let iPrice = i.price
+      let iPrice = i.total_price
+      let iQty = i.quantity
 
-      itm += iName + "\n"
-      itm += iPrice + "\n"
+      itm += (i.quantity+ "x " + iName + "        "+ "      Rp."+iPrice + "\n")
+     
     })
    return itm
   }
