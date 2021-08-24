@@ -5,6 +5,11 @@ import { ModalController, AlertController } from '@ionic/angular';
 import { PaymentModal } from './payment-modal/payment-modal';
 import { ActivatedRoute } from '@angular/router';
 import { Storage } from '@ionic/storage';
+import { CustomerService } from '../service/customer.service';
+import { PrintLineService } from '../service/printline.service';
+import { PrintBluetoothService } from '../service/printer.service';
+import { DatePipe } from '@angular/common';
+
 
 @Component({
   selector: 'app-payment',
@@ -16,6 +21,7 @@ export class PaymentPage implements OnInit {
   params;
 
   //Quickey
+
   quickyItems: any[] = [];
   quickySubItems;
   subItemName;
@@ -33,13 +39,33 @@ export class PaymentPage implements OnInit {
   customerList;
   user_id;
   user;
+  selectedPrinter: any;
+  BTprinter;
+  maxlength: number;
+  content: string = "";
 
-  constructor(private cashierService: PaymentService, private route: ActivatedRoute, private modalController: ModalController, private alertController: AlertController, private storage: Storage) {
 
+  constructor(private cashierService: PaymentService,
+     private route: ActivatedRoute,
+     private modalController: ModalController, 
+     private alertController: AlertController, 
+     private storage: Storage,
+     private CustomerService: CustomerService,
+     private PrintLine: PrintLineService,
+     private PrintBluetoothService: PrintBluetoothService,
+     private DatePipe: DatePipe
+     ) 
+
+     {
     this.storage.get('user').then((result) => {
       this.user = JSON.parse(result)
       this.user_id = this.user.id
     });
+
+    this.storage.get('printer').then((result)=>{
+      this.selectedPrinter = JSON.parse(result)
+      this.BTprinter = this.selectedPrinter
+    })
 
     let queryString = this.route.snapshot.params;
     this.params = queryString.id;
@@ -291,4 +317,94 @@ export class PaymentPage implements OnInit {
       this.createSuccessMessage(message, status);
     })
   }
+
+  onPrint(){
+    this.GenerateContent()
+    let macAddress = this.BTprinter 
+    let content = this.content
+    this.PrintBluetoothService.printBT(macAddress, content)
+    console.log(macAddress)
+    console.log(content)
+  }
+
+  LongString(text: string): string {
+    let split: string[] = [];
+    let output: string = "";
+    split = text.split("\n");
+    split.forEach(s => {
+        output += this.PrintLine.AppendLongStringCenter(s);
+    });
+
+    return output;
+  }
+
+  Header(): string {
+    const datepipe: DatePipe = new DatePipe('en-US')
+    let invoiceNumber = this.cart.number
+    let invoiceDate = datepipe.transform(this.cart.date,'dd-MMM-YYYY HH:mm')
+    this.PrintLine.Init(this.maxlength);
+    let header: string = "";
+    header += this.PrintLine.AppendCenter("              *****              \n");
+      header += this.PrintLine.AppendCenter("Invoice       : " + invoiceNumber + "\n");
+      header += this.PrintLine.AppendCenter("Date          : " + invoiceDate + "\n");
+
+      
+    return header;
+  }
+
+
+  ContacInfo(): string {
+    let info: string = "";
+    let customerName = this.cart.contact_id 
+    info += this.PrintLine.AppendCenter("Customer      : " + customerName + "\n");
+    return info;
+  }
+
+  LineSeparator(): string {
+    return this.PrintLine.Separator();
+  }
+
+  GenerateContent(): string {
+    this.storage.get("printer").then((val)=>{
+      val = this.selectedPrinter
+    })
+    let total = this.cart.total
+    let content: string = "";
+    content += this.Header(); // Generate  Template Name & Address
+    content += this.ContacInfo(); //Generate  Contact Info
+    content +=  "\n"
+    content +=  "\n"
+    content += "Item               Price\n"
+    content += "--------------------------------\n"
+    content += this.item() + "\n"
+    content += "--------------------------------\n"
+    content += "             total:"+ total 
+    this.content = content
+    return content;
+  
+  }
+
+  item(): string{
+    let item = this.cart.items
+    let itm: string = ""
+    item.forEach(i =>{
+      let iName = i.name;
+      let iPrice = i.total_price
+      let iQty = i.quantity
+
+      itm += (i.quantity+ "x " + iName + "        "+ "      Rp."+iPrice + "\n")
+     
+    })
+   return itm
+  }
+
+  doRefresh(event) {
+    console.log('Begin async operation');
+
+    setTimeout(() => {
+      console.log('Async operation has ended');
+      event.target.complete();
+    }, 2000);}
+
+    
 }

@@ -161,7 +161,7 @@
         Pay Later
       </ion-button>
 
-      <ion-button slot="end" style="width: 100%;" expand="block" color="success" (click)="onPaymentConfirmation()">
+      <ion-button slot="end" style="width: 100%;" expand="block" color="success" (click)="onPaymentConfirmation(); onPrint(); ">
         Pay Now {{cart.total}}
       </ion-button>
     </ion-toolbar>
@@ -172,6 +172,10 @@
       </ion-button>
     </ion-toolbar>
   </ion-row>
+
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
 
 </ion-content>
 

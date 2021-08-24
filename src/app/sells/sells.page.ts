@@ -405,11 +405,11 @@ export class SellsPage implements OnInit {
     content += this.ContacInfo(); //Generate  Contact Info
     content +=  "\n"
     content +=  "\n"
-    content += "Item                    Price\n"
+    content += "Item               Price\n"
     content += "--------------------------------\n"
     content += this.item() + "\n"
     content += "--------------------------------\n"
-    content += "                 total:"+ total 
+    content += "             total:"+ total 
     this.content = content
     return content;
   
