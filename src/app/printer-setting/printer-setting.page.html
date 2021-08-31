@@ -12,8 +12,8 @@
       <ion-label>
         Bluetooth List
       </ion-label>
-      <ion-select *ngFor="let item of bluetoothList" ok-text="selectPrinter(item.id)" cancel-text="Nah">
-        <ion-select-option value="item.id">{{item.name}}</ion-select-option>
+      <ion-select ok-text="selectPrinter(item.id)" cancel-text="Nah">
+        <ion-select-option *ngFor="let item of bluetoothList" value="item.id">{{item.name}}</ion-select-option>
       </ion-select>
     </ion-item>
     </ion-list>
