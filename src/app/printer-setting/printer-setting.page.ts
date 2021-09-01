@@ -33,6 +33,7 @@ export class PrinterSettingPage implements OnInit {
   }
 
   selectPrinter(macAddress) {
+    
     this.selectedPrinter = macAddress;
   }
 
