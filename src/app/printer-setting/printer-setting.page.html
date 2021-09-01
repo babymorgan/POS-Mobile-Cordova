@@ -12,9 +12,12 @@
       <ion-label>
         Bluetooth List
       </ion-label>
-      <ion-select interface="popover">
-        <ion-select-option *ngFor="let item of bluetoothList; let i = index;" (click)="selectPrinter(item.id)">{{item.name}}</ion-select-option>
-      </ion-select>
+      <ion-select #printerSelect ok-text="Confirm" cancel-text="Cancel" [compareWith]="compareWith" slot="end"
+      (ionChange)="selectPrinter(printerSelect.value)">
+      <ion-select-option [value]="item.id"  *ngFor="let item of bluetoothList; let i = index;">
+        <p>{{item.name}}</p>
+      </ion-select-option>
+    </ion-select>
     </ion-item>
     </ion-list>
 
