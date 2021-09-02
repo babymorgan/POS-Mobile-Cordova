@@ -8,18 +8,13 @@
 
 <ion-content [fullscreen]="true">
   <ion-list>
-    <ion-item>
-      <ion-label>
-        Bluetooth List
-      </ion-label>
-      <ion-select #printerSelect ok-text="Confirm" cancel-text="Cancel" [compareWith]="compareWith" slot="end"
-      (ionChange)="selectPrinter(printerSelect.value)">
-      <ion-select-option [value]="item.id"  *ngFor="let item of bluetoothList; let i = index;">
-        <p>{{item.name}}</p>
-      </ion-select-option>
-    </ion-select>
-    </ion-item>
+    <ion-item *ngFor="let item of bluetoothList" (click)="selectPrinter(item.id)">
+      {{item.name}}
+  </ion-item>
     </ion-list>
+    <div>
+      Selected Printer: {{selectedPrinter}}
+  </div>
 
     <ion-button expand="block" color="success" (click)="save()">
     Save
