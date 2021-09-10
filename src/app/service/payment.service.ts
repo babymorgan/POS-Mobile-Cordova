@@ -25,7 +25,7 @@ export class PaymentService {
   private GetCartLoaderPath = this.prefix + '/GetCartLoader';
   private GetCartLoaderUrl = this.env + this.GetCartLoaderPath;
 
-  private SubmitCartPath = this.prefix + '/Submit';
+  private SubmitCartPath = this.prefix + '/submit';
   private SubmitCartUrl = this.env + this.SubmitCartPath;
 
   constructor(private envService: EnvirontmentService, private http: HttpClient) { }
